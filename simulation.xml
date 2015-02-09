@@ -1,0 +1,92 @@
+<Lems xmlns="http://www.neuroml.org/lems/0.7.2"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.neuroml.org/lems/0.7.2">
+
+  <Target component="sim"/>
+
+  <Include file="NeuroMLCoreDimensions.xml"/>
+  <Include file="Cells.xml"/>
+  <Include file="Inputs.xml"/>
+  <Include file="Networks.xml"/>
+  <Include file="Simulation.xml"/>
+
+  <!-- load custom ComponentTypes -->
+  <Include file="lemsDefinitions/spikeGenerators.xml"/>
+  <Include file="lemsDefinitions/spikeRecorder.xml"/>
+
+  <!-- set up custom Components -->
+  <spikeRecorder id="spikeRecorder"/> 
+  <spikeGeneratorRefPoisson id="mossySpikerOFF" minimumISI="2 ms"
+			    averageRate="10 Hz"/>
+  <spikeGeneratorRefPoisson id="mossySpikerON" minimumISI="2 ms"
+			    averageRate="80 Hz"/>
+
+  <!-- load other custom Components specified in external LEMS/NeuroML
+       files -->
+  <Include file="lemsDefinitions/IaF_GrC.nml"/>
+  <Include file="lemsDefinitions/RothmanMFToGrCAMPA.nml"/>
+  <Include file="lemsDefinitions/RothmanMFToGrCNMDA.nml"/>
+
+
+
+  <network id="network">
+        <population id="GrCPop" component="IaF_GrC" size="1"/>
+	<population id="SpikeRecorderPop" component="IaF_GrC" size="1"/>
+
+	<population id="mossySpikersPopOFF" component="mossySpikerOFF"
+		    size="2"/>
+	<population id="mossySpikersPopON" component="mossySpikerON"
+		    size="2"/>
+
+	<!-- AMPA -->
+	<synapticConnection from="mossySpikersPopOFF[0]" to="GrCPop[0]"
+			    synapse="RothmanMFToGrCAMPA"
+			    destination="synapses"/>
+	<synapticConnection from="mossySpikersPopOFF[1]" to="GrCPop[0]"
+			    synapse="RothmanMFToGrCAMPA"
+			    destination="synapses"/>
+	<synapticConnection from="mossySpikersPopON[0]" to="GrCPop[0]"
+			    synapse="RothmanMFToGrCAMPA"
+			    destination="synapses"/>
+	<synapticConnection from="mossySpikersPopON[1]" to="GrCPop[0]"
+			    synapse="RothmanMFToGrCAMPA"
+			    destination="synapses"/>
+
+	<!-- NMDA -->
+	<synapticConnection from="mossySpikersPopOFF[0]" to="GrCPop[0]"
+			    synapse="RothmanMFToGrCNMDA"
+			    destination="synapses"/>
+	<synapticConnection from="mossySpikersPopOFF[0]" to="GrCPop[0]"
+			    synapse="RothmanMFToGrCNMDA"
+			    destination="synapses"/>
+	<synapticConnection from="mossySpikersPopON[0]" to="GrCPop[0]"
+			    synapse="RothmanMFToGrCNMDA"
+			    destination="synapses"/>
+	<synapticConnection from="mossySpikersPopON[0]" to="GrCPop[0]"
+			    synapse="RothmanMFToGrCNMDA"
+			    destination="synapses"/>
+
+
+	<!-- GrC to spike recorder -->
+	<synapticConnection from="GrCPop[0]" to="SpikeRecorderPop[0]" synapse="spikeRecorder" destination="synapses"/>
+
+  </network>
+
+  <Simulation id="sim" length="1s" step="0.01ms" target="network">
+    <Display id="display1" title="Voltage" timeScale="1ms" xmin="-10" xmax="1010" ymin="-95" ymax="-38">
+      <Line id="GrC: Vm" quantity="GrCPop[0]/v" scale="1mV"
+	    color="#66c2a5" timeScale="1ms"/>
+    </Display>
+    <Display id="display2" title="Spike count" timeScale="1ms" xmin="-10"
+	     xmax="1010" ymin="-1" ymax="10">
+      <Line id="Spike count" quantity="SpikeRecorderPop[0]/spikeRecorder/spikeCount"
+	    scale="1" color="#fc8d62" timeScale="1ms"/>
+    </Display>
+    <OutputFile id="of1" fileName="output.txt">
+      <OutputColumn id="sc" quantity="SpikeRecorderPop[0]/spikeRecorder/spikeCount"/>
+    </OutputFile>
+
+  </Simulation>
+
+</Lems>
+
