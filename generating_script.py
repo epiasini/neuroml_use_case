@@ -44,10 +44,10 @@ RothmanMFToGrCNMDA_doc = nml.import_lems("lemsDefinitions/RothmanMFToGrCNMDA.nml
 # define some components from the componentTypes we just loaded
 spike_recorder = spike_recorder_doc.spikeRecorder(id="spikeRecorder")
 
-generator_ON = spike_generator_doc.spikeGeneratorRefPoisson(id="mossySpikerON".format(k),
+generator_ON = spike_generator_doc.spikeGeneratorRefPoisson(id="mossySpikerON",
                                                             minimumISI="2 ms",
                                                             averageRate="80 Hz")
-generator_OFF = spike_generator_doc.spikeGeneratorRefPoisson(id="mossySpikerOFF".format(k),
+generator_OFF = spike_generator_doc.spikeGeneratorRefPoisson(id="mossySpikerOFF",
                                                              minimumISI="2 ms",
                                                              averageRate="80 Hz")
 
@@ -83,7 +83,7 @@ net.populations.append(mossySpikersPopOFF)
 for stim_pop in [mossySpikersPopON, mossySpikersPopOFF]:
     for k in range(stim_pop.size):
         for synapse in [RothmanMFToGrCAMPA, RothmanMFToGrCNMDA]:
-            connection = nml.SynapticConnection(from="{}[{}]".format(stim_pop, k),
+            connection = nml.SynapticConnection(from="{}[{}]".format(stim_pop.id, k),
                                                 synapse=synapse,
                                                 to="GrCPop[0]")
             net.synaptic_connections.append(connection)
