@@ -28,6 +28,7 @@ from a LEMS/NeuroML file.
 import numpy as np
 import neuroml as nml
 from pyneuroml import pynml
+from pyneuroml.lems.LEMSSimulation import LEMSSimulation
 
 # set parameters controlling the number of "on" and "off" synaptic
 # inputs. We do this to show why it is convenient to generate the
@@ -38,7 +39,8 @@ n_inputs_OFF = 2
 # load NeuroML components, LEMS components and LEMS componentTypes from external files
 ####spike_generator_doc = nml.import_lems("lemsDefinitions/spikeGenerators.xml")
 ####spike_recorder_doc = nml.import_lems("lemsDefinitions/spikeRecorder.xml")
-IaF_GrC_doc = pynml.read_neuroml2_file("lemsDefinitions/IaF_GrC.nml")
+iaf_nml2_file_name = "lemsDefinitions/IaF_GrC.nml"
+IaF_GrC_doc = pynml.read_neuroml2_file(iaf_nml2_file_name)
 ####RothmanMFToGrCAMPA_doc = nml.import_lems("lemsDefinitions/RothmanMFToGrCAMPA.nml")
 ####RothmanMFToGrCNMDA_doc = nml.import_lems("lemsDefinitions/RothmanMFToGrCNMDA.nml")
 
@@ -99,43 +101,48 @@ for stim_pop in [mossySpikersPopON, mossySpikersPopOFF]:
 net.append(nml.SynapticConnection(from_="GrCPop[0]",
                                   to="SpikeRecorderPop[0]",
                                   synapse=spikeRecorder.id))
+'''
 
 
-# define outputs
-plot_1 = nml.Display(id="display1", title="Voltage", timeScale="1ms",
-                     xmin="-10", xmax="1010", ymin="-95", ymax="-38")
-plot_1.lines.append(nml.Line(id="GrC: Vm", quantity="GrCPop[0]/v",
-                             scale="1mV", color="#66c2a5", timeScale="1ms"))
-plot_2 = nml.Display(id="display2", title="Spike count", timeScale="1ms",
-                     xmin="-10", xmax="1010", ymin="-1", ymax="10")
-plot_2.lines.append(nml.Line(id="GrC: Vm",
-                             quantity="SpikeRecorderPop[0]/spikeRecorder/spikeCount",
-                             scale="1", color="#fc8d62", timeScale="1ms"))
-                             
-out_file_1 = nml.OutFile(id="of1", fileName="output.txt")
-out_file_1.output_columns.append(nml.OutputColumn(id="sc", quantity="SpikeRecorderPop[0]/spikeRecorder/spikeCount"))
+
+# Write network to file
+net_file_name = 'generated_network.net.nml'
+pynml.write_neuroml2_file(net_doc, net_file_name)
 
 
-# define simulation
-simulation = nml.Simulation(id="sim", length="1 s", step="0.01 ms", target=net.id)
-simulation.displays.append(plot_1)
-simulation.displays.append(plot_2)
-simulation.out_files.append(out_file_1)'''
-
-pynml.write_neuroml2_file(net_doc, 'generated_network.net.nml')
-
-# run simulation
-####simulation.run(simulator="NEURON") # if exporting to neuron, graphical
-                                   # output doesn't necessarily need
-                                   # to be implemented.. but output to
-                                   # disk is very important.
-
-# load back simulation output
-####sim_data = np.loadtxt("output.txt")
+# Create a LEMSSimulation to manage creation of LEMS file
+duration = 1000  # ms
+dt = 0.05  # ms
+ls = LEMSSimulation("sim", duration, dt)
 
 
-# serialise to external xml file all elements needed to run the
-# simulation (I suppose this must be implemented anyway to allow for
-# code generation or simulation with jlems)
-####simulation.serialize("generated_simulation.xml")
+# Point to network as target of simulation
+ls.assign_simulation_target(net.id)
+
+
+# Include generated/existing NeuroML2 files
+ls.include_neuroml2_file(iaf_nml2_file_name)
+ls.include_neuroml2_file(net_file_name)
+
+
+# Specify Displays and Output Files
+disp0 = "display1"
+ls.create_display(disp0, "Voltages", "-95", "-38")
+
+of0 = 'Volts_file'
+ls.create_output_file(of0, "v.dat")
+
+quantity = "%s[%i]/v"%(GrCPop.id, 0)
+ls.add_line_to_display(disp0, "GrC: Vm", quantity, "1mV", "#66c2a5")
+ls.add_column_to_output_file(of0, 'v0', quantity)
+
+# Save to LEMS XML file
+lems_file_name = ls.save_to_file()
+
+# Run with jNeuroML
+results1 = pynml.run_lems_with_jneuroml(lems_file_name, nogui=True, load_saved_data=True, plot=True)
+
+# Run with jNeuroML_NEURON
+results2 = pynml.run_lems_with_jneuroml_neuron(lems_file_name, nogui=True, load_saved_data=True, plot=True)
+
 

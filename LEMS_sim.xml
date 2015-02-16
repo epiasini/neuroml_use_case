@@ -1,0 +1,32 @@
+<Lems>
+    
+    <!-- 
+
+        This LEMS file has been automatically generated using PyNeuroML v0.0.2
+
+     -->
+    
+    <!-- Specify which component to run -->
+    <Target component="sim"/>
+
+    <!-- Include core NeuroML2 ComponentType definitions -->
+    <Include file="Cells.xml"/>
+    <Include file="Networks.xml"/>
+    <Include file="Simulation.xml"/>
+    
+    <Include file="lemsDefinitions/IaF_GrC.nml"/>
+    <Include file="generated_network.net.nml"/>
+   
+    <Simulation id="sim" length="1000ms" step="0.05ms" target="network">
+        
+        <Display id="display1" title="Voltages" timeScale="1ms" xmin="-100.0" xmax="1100.0" ymin="-95" ymax="-38">
+            <Line id="GrC: Vm" quantity="GrCPop[0]/v" scale="1mV" color="#66c2a5" timeScale="1ms"/>
+        </Display>
+
+        <OutputFile id="Volts_file" fileName="v.dat">
+            <OutputColumn id="v0" quantity="GrCPop[0]/v"/> 
+        </OutputFile>
+
+    </Simulation>
+
+</Lems>
