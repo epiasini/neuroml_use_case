@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<neuroml xmlns="http://www.neuroml.org/schema/neuroml2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 http://neuroml.svn.sourceforge.net/viewvc/neuroml/NeuroML2/Schemas/NeuroML2/NeuroML_v2beta.xsd" id="RothmanMFToGrCNMDA">
+<Lems xmlns="http://www.neuroml.org/lems/0.7.2"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.neuroml.org/lems/0.7.2">
 
-  <notes>NeuroML 2 file containing a single synapse.</notes>
-  <Include file="NeuroMLCoreDimensions.xml"/>
-  <Include file="Synapses.xml"/>
+    <Include file="NeuroMLCoreDimensions.xml"/>
+    <Include file="Synapses.xml"/>
 
   <TriExpBlockStpSynapse id="RothmanMFToGrCNMDA"
 			 erev="0 mV"
@@ -63,8 +63,8 @@
 	<StateVariable name="directB1" dimension="none"/>
 	<StateVariable name="directB2" dimension="none"/>
 
-	<DerivedVariable name="directPeakTime1" dimension="time" value="(directTauRise * directTauDecay1)/(directTauDecay1 - directTauRise) * ln(directTauDecay1 / directTauRise)" />
-	<DerivedVariable name="directPeakTime2" dimension="time" value="(directTauRise * directTauDecay2)/(directTauDecay2 - directTauRise) * ln(directTauDecay2 / directTauRise)" />
+	<DerivedVariable name="directPeakTime1" dimension="time" value="(directTauRise * directTauDecay1)/(directTauDecay1 - directTauRise) * log(directTauDecay1 / directTauRise)" />
+	<DerivedVariable name="directPeakTime2" dimension="time" value="(directTauRise * directTauDecay2)/(directTauDecay2 - directTauRise) * log(directTauDecay2 / directTauRise)" />
 	<DerivedVariable name="directFactor1" dimension="none" value="1 / (-exp(-directPeakTime1 / directTauRise) + exp(-directPeakTime1 / directTauDecay1))" />
 	<DerivedVariable name="directFactor2" dimension="none" value="1 / (-exp(-directPeakTime2 / directTauRise) + exp(-directPeakTime2 / directTauDecay2))" />
 
@@ -123,4 +123,4 @@
     </Dynamics>
   </ComponentType>
 
-</neuroml>
+</Lems>

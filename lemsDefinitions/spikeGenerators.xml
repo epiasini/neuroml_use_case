@@ -19,7 +19,7 @@
                 <StateAssignment variable="isi" value="minimumISI - (averageIsi-minimumISI) * log(1 - random(1))"/>
             </OnStart>
 
-            <OnCondition test="tsince .geq. isi">
+            <OnCondition test="tsince .gt. isi">
                 <StateAssignment variable="tsince" value="0"/>
                 <StateAssignment variable="isi" value="minimumISI - (averageIsi-minimumISI) * log(1 - random(1))"/>
                 <EventOut port="spike"/>

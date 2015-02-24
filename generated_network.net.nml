@@ -2,6 +2,9 @@
     <network id="network">
         <population id="GrCPop" component="IaF_GrC" size="1"/>
         <population id="mossySpikerONPop" component="mossySpikerON" size="2"/>
-        <population id="mossySpikerOFFPop" component="mossySpikerOFF" size="2"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[0]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[0]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[1]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[1]"/>
     </network>
 </neuroml>

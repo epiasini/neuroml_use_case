@@ -25,7 +25,7 @@ other words, import_lems() would work in a way analogous to Python's
 from a LEMS/NeuroML file.
 
 """
-import numpy as np
+
 import neuroml as nml
 from pyneuroml import pynml
 from pyneuroml.lems.LEMSSimulation import LEMSSimulation
@@ -40,12 +40,17 @@ n_inputs_OFF = 2
 # load NeuroML components, LEMS components and LEMS componentTypes from external files
 spike_generator_file_name = "lemsDefinitions/spikeGenerators.xml"
 spike_generator_doc = pynml.read_lems_file(spike_generator_file_name)
-####spike_recorder_doc = nml.import_lems("lemsDefinitions/spikeRecorder.xml")
+
+###spike_recorder_file_name = "lemsDefinitions/spikeRecorder.xml"
+###spike_recorder_doc = pynml.read_lems_file(spike_recorder_file_name)
+
 iaf_nml2_file_name = "lemsDefinitions/IaF_GrC.nml"
 IaF_GrC_doc = pynml.read_neuroml2_file(iaf_nml2_file_name)
-####RothmanMFToGrCAMPA_doc = nml.import_lems("lemsDefinitions/RothmanMFToGrCAMPA.nml")
-####RothmanMFToGrCNMDA_doc = nml.import_lems("lemsDefinitions/RothmanMFToGrCNMDA.nml")
 
+ampa_syn_filename="lemsDefinitions/RothmanMFToGrCAMPA.xml"
+nmda_syn_filename="lemsDefinitions/RothmanMFToGrCNMDA.xml"
+RothmanMFToGrCAMPA_doc = pynml.read_lems_file(ampa_syn_filename)
+RothmanMFToGrCNMDA_doc = pynml.read_lems_file(nmda_syn_filename)
 
 
 # define some components from the componentTypes we just loaded
@@ -55,19 +60,19 @@ spike_generator_ref_poisson_type = spike_generator_doc.component_types['spikeGen
 lems_instances_doc = lems.Model()
 
 spike_generator_on = lems.Component("mossySpikerON", 
-                                                      spike_generator_ref_poisson_type.name)
+                                    spike_generator_ref_poisson_type.name)
                                                       
 spike_generator_on.set_parameter("minimumISI", "2 ms")
 spike_generator_on.set_parameter("averageRate", "80 Hz")
 lems_instances_doc.add(spike_generator_on)
-
+'''
 spike_generator_off = lems.Component("mossySpikerOFF", 
-                                                      spike_generator_ref_poisson_type.name)
+                                     spike_generator_ref_poisson_type.name)
                                                       
 spike_generator_off.set_parameter("minimumISI", "2 ms")
 spike_generator_off.set_parameter("averageRate", "80 Hz")
 lems_instances_doc.add(spike_generator_off)
-
+'''
 
 # rename some components for convenience
 IaF_GrC = IaF_GrC_doc.iaf_ref_cells[0] # note that here IaF_GrC_doc.IaF_GrC is
@@ -75,8 +80,8 @@ IaF_GrC = IaF_GrC_doc.iaf_ref_cells[0] # note that here IaF_GrC_doc.IaF_GrC is
                               # componentType, so it doesn't need to
                               # be instantiated.
                               
-####RothmanMFToGrCAMPA = RothmanMFToGrCAMPA_doc.RothmanMFToGrCAMPA
-####RothmanMFToGrCNMDA = RothmanMFToGrCAMPA_doc.RothmanMFToGrCNMDA
+RothmanMFToGrCAMPA = RothmanMFToGrCAMPA_doc.components['RothmanMFToGrCAMPA'].id
+RothmanMFToGrCNMDA = RothmanMFToGrCNMDA_doc.components['RothmanMFToGrCNMDA'].id
 
 # create populations
 GrCPop = nml.Population(id="GrCPop",
@@ -91,9 +96,11 @@ SpikeRecorderPop = nml.Population(id="SpikeRecorderPop",
 mossySpikersPopON = nml.Population(id=spike_generator_on.id+"Pop",
                                    component=spike_generator_on.id,
                                    size=n_inputs_ON)
+'''
 mossySpikersPopOFF = nml.Population(id=spike_generator_off.id+"Pop",
                                     component=spike_generator_off.id,
-                                    size=n_inputs_OFF)
+                                    size=n_inputs_OFF)'''
+                                    
 # create network and add populations
 net = nml.Network(id="network")
 net_doc = nml.NeuroMLDocument(id=net.id)
@@ -101,16 +108,18 @@ net_doc.networks.append(net)
 net.populations.append(GrCPop)
 ####net.populations.append(SpikeRecordersPop)
 net.populations.append(mossySpikersPopON)
-net.populations.append(mossySpikersPopOFF)
-'''
+#net.populations.append(mossySpikersPopOFF)
+
 # set up connections
-for stim_pop in [mossySpikersPopON, mossySpikersPopOFF]:
+################for stim_pop in [mossySpikersPopON, mossySpikersPopOFF]:
+for stim_pop in [mossySpikersPopON]:
     for k in range(stim_pop.size):
         for synapse in [RothmanMFToGrCAMPA, RothmanMFToGrCNMDA]:
             connection = nml.SynapticConnection(from_="{}[{}]".format(stim_pop.id, k),
                                                 synapse=synapse,
                                                 to="GrCPop[0]")
             net.synaptic_connections.append(connection)
+'''
 # set up fake connection for counting spikes
 net.append(nml.SynapticConnection(from_="GrCPop[0]",
                                   to="SpikeRecorderPop[0]",
@@ -130,7 +139,7 @@ pynml.write_lems_file(lems_instances_doc, lems_instances_file_name)
 
 
 # Create a LEMSSimulation to manage creation of LEMS file
-duration = 1000  # ms
+duration = 100  # ms
 dt = 0.05  # ms
 ls = LEMSSimulation("sim", duration, dt)
 
@@ -143,6 +152,9 @@ ls.assign_simulation_target(net.id)
 ls.include_neuroml2_file(iaf_nml2_file_name)
 ls.include_lems_file(spike_generator_file_name, include_included=False)
 ls.include_lems_file(lems_instances_file_name)
+ls.include_lems_file(ampa_syn_filename, include_included=False)
+ls.include_lems_file(nmda_syn_filename, include_included=False)
+###ls.include_lems_file(spike_recorder_file_name)
 ls.include_neuroml2_file(net_file_name)
 
 
@@ -162,10 +174,10 @@ ls.add_column_to_output_file(of0, 'v0', quantity)
 
 quantity = "%s[%i]/tsince"%(mossySpikersPopON.id, 0)
 ls.add_line_to_display(disp1, "mossySpikersPopON 0", quantity, "1ms", "#000000")
-
+'''
 quantity = "%s[%i]/tsince"%(mossySpikersPopOFF.id, 0)
 ls.add_line_to_display(disp1, "mossySpikersPopOFF 0", quantity, "1ms", "#FF0000")
-
+'''
 
 # Save to LEMS XML file
 lems_file_name = ls.save_to_file()
