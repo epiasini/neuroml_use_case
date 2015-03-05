@@ -34,8 +34,8 @@ import lems.api as lems
 # set parameters controlling the number of "on" and "off" synaptic
 # inputs. We do this to show why it is convenient to generate the
 # simulation procedurally, rather than writing by hand the LEMS code.
-n_inputs_ON = 2
-n_inputs_OFF = 2
+n_inputs_ON = 7
+n_inputs_OFF = 7
 
 # load NeuroML components, LEMS components and LEMS componentTypes from external files
 spike_generator_file_name = "lemsDefinitions/spikeGenerators.xml"
@@ -62,7 +62,7 @@ lems_instances_doc = lems.Model()
 spike_generator_on = lems.Component("mossySpikerON", 
                                     spike_generator_ref_poisson_type.name)
                                                       
-spike_generator_on.set_parameter("minimumISI", "2 ms")
+spike_generator_on.set_parameter("minimumISI", "20 ms")
 spike_generator_on.set_parameter("averageRate", "80 Hz")
 lems_instances_doc.add(spike_generator_on)
 '''
@@ -139,7 +139,7 @@ pynml.write_lems_file(lems_instances_doc, lems_instances_file_name)
 
 
 # Create a LEMSSimulation to manage creation of LEMS file
-duration = 500  # ms
+duration = 300  # ms
 dt = 0.05  # ms
 ls = LEMSSimulation("sim", duration, dt)
 
@@ -168,12 +168,18 @@ ls.create_display(disp1, "Spike generators", "-10", "80")
 of0 = 'Volts_file'
 ls.create_output_file(of0, "v.dat")
 
+of1 = 'prespike_file'
+ls.create_output_file(of1, "prespike.dat")
+
 quantity = "%s[%i]/v"%(GrCPop.id, 0)
 ls.add_line_to_display(disp0, "GrC: Vm", quantity, "1mV", "#66c2a5")
 ls.add_column_to_output_file(of0, 'v0', quantity)
 
-quantity = "%s[%i]/tsince"%(mossySpikersPopON.id, 0)
-ls.add_line_to_display(disp1, "mossySpikersPopON 0", quantity, "1ms", "#000000")
+for i in range(n_inputs_ON):
+    quantity = "%s[%i]/tsince"%(mossySpikersPopON.id, i)
+    ls.add_line_to_display(disp1, "mossySpikersPopON %i"%i, quantity, "1ms", "#000000")
+    ls.add_column_to_output_file(of1, 'tsince', quantity)
+    
 '''
 quantity = "%s[%i]/tsince"%(mossySpikersPopOFF.id, 0)
 ls.add_line_to_display(disp1, "mossySpikersPopOFF 0", quantity, "1ms", "#FF0000")

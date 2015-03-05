@@ -1,10 +1,20 @@
 <neuroml xmlns="http://www.neuroml.org/schema/neuroml2"  xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.neuroml.org/schema/neuroml2 https://raw.github.com/NeuroML/NeuroML2/development/Schemas/NeuroML2/NeuroML_v2beta4.xsd" id="network">
     <network id="network">
         <population id="GrCPop" component="IaF_GrC" size="1"/>
-        <population id="mossySpikerONPop" component="mossySpikerON" size="2"/>
+        <population id="mossySpikerONPop" component="mossySpikerON" size="7"/>
         <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[0]"/>
         <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[0]"/>
         <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[1]"/>
         <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[1]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[2]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[2]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[3]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[3]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[4]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[4]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[5]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[5]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[6]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[6]"/>
     </network>
 </neuroml>
