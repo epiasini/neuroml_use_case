@@ -45,12 +45,12 @@ spike_generator_doc = pynml.read_lems_file(spike_generator_file_name)
 ###spike_recorder_doc = pynml.read_lems_file(spike_recorder_file_name)
 
 iaf_nml2_file_name = "lemsDefinitions/IaF_GrC.nml"
-IaF_GrC_doc = pynml.read_neuroml2_file(iaf_nml2_file_name)
+iaF_GrC_doc = pynml.read_neuroml2_file(iaf_nml2_file_name)
 
 ampa_syn_filename="lemsDefinitions/RothmanMFToGrCAMPA.xml"
 nmda_syn_filename="lemsDefinitions/RothmanMFToGrCNMDA.xml"
-RothmanMFToGrCAMPA_doc = pynml.read_lems_file(ampa_syn_filename)
-RothmanMFToGrCNMDA_doc = pynml.read_lems_file(nmda_syn_filename)
+rothmanMFToGrCAMPA_doc = pynml.read_lems_file(ampa_syn_filename)
+rothmanMFToGrCNMDA_doc = pynml.read_lems_file(nmda_syn_filename)
 
 
 # define some components from the componentTypes we just loaded
@@ -75,22 +75,22 @@ lems_instances_doc.add(spike_generator_off)
 '''
 
 # rename some components for convenience
-IaF_GrC = IaF_GrC_doc.iaf_ref_cells[0] # note that here IaF_GrC_doc.IaF_GrC is
+iaF_GrC = iaF_GrC_doc.iaf_ref_cells[0] # note that here iaF_GrC_doc.iaf_ref_cells[0] is
                               # already a component, not a
                               # componentType, so it doesn't need to
                               # be instantiated.
                               
-RothmanMFToGrCAMPA = RothmanMFToGrCAMPA_doc.components['RothmanMFToGrCAMPA'].id
-RothmanMFToGrCNMDA = RothmanMFToGrCNMDA_doc.components['RothmanMFToGrCNMDA'].id
+rothmanMFToGrCAMPA = rothmanMFToGrCAMPA_doc.components['RothmanMFToGrCAMPA'].id
+rothmanMFToGrCNMDA = rothmanMFToGrCNMDA_doc.components['RothmanMFToGrCNMDA'].id
 
 # create populations
 GrCPop = nml.Population(id="GrCPop",
-                        component=IaF_GrC.id,
+                        component=iaF_GrC.id,
                         size=1)
     
 '''
 SpikeRecorderPop = nml.Population(id="SpikeRecorderPop",
-                                  component="IaF_GrC",
+                                  component="iaF_GrC",
                                   size=1)'''
                                   
 mossySpikersPopON = nml.Population(id=spike_generator_on.id+"Pop",
@@ -114,7 +114,7 @@ net.populations.append(mossySpikersPopON)
 ################for stim_pop in [mossySpikersPopON, mossySpikersPopOFF]:
 for stim_pop in [mossySpikersPopON]:
     for k in range(stim_pop.size):
-        for synapse in [RothmanMFToGrCAMPA, RothmanMFToGrCNMDA]:
+        for synapse in [rothmanMFToGrCAMPA, rothmanMFToGrCNMDA]:
             connection = nml.SynapticConnection(from_="{}[{}]".format(stim_pop.id, k),
                                                 synapse=synapse,
                                                 to="GrCPop[0]")
@@ -139,7 +139,7 @@ pynml.write_lems_file(lems_instances_doc, lems_instances_file_name)
 
 
 # Create a LEMSSimulation to manage creation of LEMS file
-duration = 100  # ms
+duration = 500  # ms
 dt = 0.05  # ms
 ls = LEMSSimulation("sim", duration, dt)
 
