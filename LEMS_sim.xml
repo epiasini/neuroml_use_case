@@ -21,13 +21,13 @@
     <Include file="lemsDefinitions/RothmanMFToGrCNMDA.xml"/>
     <Include file="generated_network.net.nml"/>
    
-    <Simulation id="sim" length="100ms" step="0.05ms" target="network">
+    <Simulation id="sim" length="500ms" step="0.05ms" target="network">
         
-        <Display id="display_voltages" title="Voltages" timeScale="1ms" xmin="-10.0" xmax="110.0" ymin="-95" ymax="-38">
+        <Display id="display_voltages" title="Voltages" timeScale="1ms" xmin="-50.0" xmax="550.0" ymin="-95" ymax="-38">
             <Line id="GrC: Vm" quantity="GrCPop[0]/v" scale="1mV" color="#66c2a5" timeScale="1ms"/>
         </Display>
         
-        <Display id="display_spike_generators" title="Spike generators" timeScale="1ms" xmin="-10.0" xmax="110.0" ymin="-10" ymax="80">
+        <Display id="display_spike_generators" title="Spike generators" timeScale="1ms" xmin="-50.0" xmax="550.0" ymin="-10" ymax="80">
             <Line id="mossySpikersPopON 0" quantity="mossySpikerONPop[0]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
         </Display>
         
