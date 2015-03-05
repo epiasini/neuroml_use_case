@@ -20,10 +20,10 @@
                                            spilloverTauDecay1="0.4 ms"
                                            spilloverTauDecay2="4.899 ms"
                                            spilloverTauDecay3="43.10 ms">
-        <directPlasticityMechanism type="tsodyksMarkramDepMechanism"
+        <directPM type="tsodyksMarkramDepMechanism"
                                initReleaseProb="0.1249"
                                tauRec="131 ms" />
-        <spilloverPlasticityMechanism type="tsodyksMarkramDepMechanism"
+        <spilloverPM type="tsodyksMarkramDepMechanism"
                                   initReleaseProb="0.2792"
                                   tauRec="14.85 ms" />
         <notes>
@@ -53,7 +53,7 @@
         <Parameter name="directTauDecay1" dimension="time"/>
         <Parameter name="directTauDecay2" dimension="time"/>
         <!-- short term plasticity parameters -->
-        <Child name="directPlasticityMechanism" type="basePlasticityMechanism"/>
+        <Child name="directPM" type="basePlasticityMechanism"/>
 
         <!-- SPILLOVER -->
         <!-- waveform shape parameters -->
@@ -65,7 +65,7 @@
         <Parameter name="spilloverTauDecay2" dimension="time"/>
         <Parameter name="spilloverTauDecay3" dimension="time"/>
         <!-- short term plasticity parameters -->
-        <Child name="spilloverPlasticityMechanism" type="basePlasticityMechanism"/>
+        <Child name="spilloverPM" type="basePlasticityMechanism"/>
 
         <Dynamics>
             <DerivedVariable name="g" dimension="conductance" exposure="g" value="directAmp1 * (directB1 - directA1) + directAmp2 * (directB2 - directA2) + spilloverAmp1 * (spilloverB1 - spilloverA1) + spilloverAmp2 * (spilloverB2 - spilloverA2) + spilloverAmp3 * (spilloverB3 - spilloverA3)"/>
@@ -87,7 +87,7 @@
             <TimeDerivative variable="directB1" value="-directB1 / directTauDecay1" />
             <TimeDerivative variable="directB2" value="-directB2 / directTauDecay2" />
 
-            <DerivedVariable name="directPlasticityFactor" dimension="none" select="directPlasticityMechanism/plasticityFactor" />
+            <DerivedVariable name="directPlasticityFactor" dimension="none" select="directPM/plasticityFactor" />
 
             <!-- SPILLOVER -->
             <StateVariable name="spilloverA1" dimension="none"/>
@@ -111,7 +111,7 @@
             <TimeDerivative variable="spilloverB2" value="-spilloverB2 / spilloverTauDecay2" />
             <TimeDerivative variable="spilloverB3" value="-spilloverB3 / spilloverTauDecay3" />
 
-            <DerivedVariable name="spilloverPlasticityFactor" dimension="none" select="spilloverPlasticityMechanism/plasticityFactor" />
+            <DerivedVariable name="spilloverPlasticityFactor" dimension="none" select="spilloverPM/plasticityFactor" />
 
             <OnStart>
                 <!-- DIRECT -->

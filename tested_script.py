@@ -187,6 +187,6 @@ results1 = pynml.run_lems_with_jneuroml(lems_file_name, nogui=True, load_saved_d
 
 '''
 # Run with jNeuroML_NEURON
-results2 = pynml.run_lems_with_jneuroml_neuron(lems_file_name, nogui=True, load_saved_data=True, plot=True)
 '''
 
+results2 = pynml.run_lems_with_jneuroml_neuron(lems_file_name, nogui=True, load_saved_data=True, plot=True)
