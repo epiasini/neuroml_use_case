@@ -1,0 +1,56 @@
+<Lems>
+    
+    <!-- 
+
+        This LEMS file has been automatically generated using PyNeuroML v0.0.3
+
+     -->
+    
+    <!-- Specify which component to run -->
+    <Target component="sim"/>
+
+    <!-- Include core NeuroML2 ComponentType definitions -->
+    <Include file="Cells.xml"/>
+    <Include file="Networks.xml"/>
+    <Include file="Simulation.xml"/>
+    
+    <Include file="lemsDefinitions/IaF_GrC.nml"/>
+    <Include file="lemsDefinitions/spikeGenerators.xml"/>
+    <Include file="instances.xml"/>
+    <Include file="lemsDefinitions/RothmanMFToGrCAMPA.xml"/>
+    <Include file="lemsDefinitions/RothmanMFToGrCNMDA.xml"/>
+    <Include file="generated_network.net.nml"/>
+   
+    <Simulation id="sim" length="300ms" step="0.05ms" target="network">
+        
+        <Display id="display_voltages" title="Voltages" timeScale="1ms" xmin="-30.0" xmax="330.0" ymin="-95" ymax="-38">
+            <Line id="GrC: Vm" quantity="GrCPop[0]/v" scale="1mV" color="#66c2a5" timeScale="1ms"/>
+        </Display>
+        
+        <Display id="display_spike_generators" title="Spike generators" timeScale="1ms" xmin="-30.0" xmax="330.0" ymin="-10" ymax="80">
+            <Line id="mossySpikersPopON 0" quantity="mossySpikerONPop[0]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
+            <Line id="mossySpikersPopON 1" quantity="mossySpikerONPop[1]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
+            <Line id="mossySpikersPopON 2" quantity="mossySpikerONPop[2]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
+            <Line id="mossySpikersPopON 3" quantity="mossySpikerONPop[3]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
+            <Line id="mossySpikersPopON 4" quantity="mossySpikerONPop[4]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
+            <Line id="mossySpikersPopON 5" quantity="mossySpikerONPop[5]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
+            <Line id="mossySpikersPopON 6" quantity="mossySpikerONPop[6]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
+        </Display>
+        
+        <OutputFile id="Volts_file" fileName="v.dat">
+            <OutputColumn id="v0" quantity="GrCPop[0]/v"/> 
+        </OutputFile>
+        
+        <OutputFile id="prespike_file" fileName="prespike.dat">
+            <OutputColumn id="tsince" quantity="mossySpikerONPop[0]/tsince"/> 
+            <OutputColumn id="tsince" quantity="mossySpikerONPop[1]/tsince"/> 
+            <OutputColumn id="tsince" quantity="mossySpikerONPop[2]/tsince"/> 
+            <OutputColumn id="tsince" quantity="mossySpikerONPop[3]/tsince"/> 
+            <OutputColumn id="tsince" quantity="mossySpikerONPop[4]/tsince"/> 
+            <OutputColumn id="tsince" quantity="mossySpikerONPop[5]/tsince"/> 
+            <OutputColumn id="tsince" quantity="mossySpikerONPop[6]/tsince"/> 
+        </OutputFile>
+        
+    </Simulation>
+
+</Lems>

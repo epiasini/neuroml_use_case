@@ -1,0 +1,9 @@
+x86_64
+i386
+umac
+
+*.dat
+*.mod
+*.hoc
+*nrn.py
+/output.txt
