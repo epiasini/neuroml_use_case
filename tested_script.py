@@ -165,15 +165,31 @@ ls.create_display(disp0, "Voltages", "-95", "-38")
 disp1 = "display_spike_generators"
 ls.create_display(disp1, "Spike generators", "-10", "80")
 
+disp2 = "display_syn_conductances"
+ls.create_display(disp2, "Synaptic conductances", "-1", "1")
+
 of0 = 'Volts_file'
 ls.create_output_file(of0, "v.dat")
 
 of1 = 'prespike_file'
 ls.create_output_file(of1, "prespike.dat")
 
+of2 = 'conds_file'
+ls.create_output_file(of2, "syncond.dat")
+
+
 quantity = "%s[%i]/v"%(GrCPop.id, 0)
 ls.add_line_to_display(disp0, "GrC: Vm", quantity, "1mV", "#66c2a5")
 ls.add_column_to_output_file(of0, 'v0', quantity)
+
+quantity = "%s[%i]/RothmanMFToGrCAMPA/g"%(GrCPop.id, 0)
+ls.add_line_to_display(disp2, "GrC: AMPA g", quantity, "1mV", "#66c2a5")
+ls.add_column_to_output_file(of2, 'AMPAg', quantity)
+
+quantity = "%s[%i]/RothmanMFToGrCNMDA/g"%(GrCPop.id, 0)
+ls.add_line_to_display(disp2, "GrC: NMDA g", quantity, "1mV", "#FF0000")
+ls.add_column_to_output_file(of2, 'NMDA', quantity)
+
 
 for i in range(n_inputs_ON):
     quantity = "%s[%i]/tsince"%(mossySpikersPopON.id, i)
@@ -195,4 +211,4 @@ results1 = pynml.run_lems_with_jneuroml(lems_file_name, nogui=True, load_saved_d
 # Run with jNeuroML_NEURON
 '''
 
-results2 = pynml.run_lems_with_jneuroml_neuron(lems_file_name, nogui=True, load_saved_data=True, plot=True)
+#results2 = pynml.run_lems_with_jneuroml_neuron(lems_file_name, nogui=True, load_saved_data=True, plot=True)

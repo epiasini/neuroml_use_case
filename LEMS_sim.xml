@@ -37,6 +37,11 @@
             <Line id="mossySpikersPopON 6" quantity="mossySpikerONPop[6]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
         </Display>
         
+        <Display id="display_syn_conductances" title="Synaptic conductances" timeScale="1ms" xmin="-30.0" xmax="330.0" ymin="-1" ymax="1">
+            <Line id="GrC: AMPA g" quantity="GrCPop[0]/RothmanMFToGrCAMPA/g" scale="1mV" color="#66c2a5" timeScale="1ms"/>
+            <Line id="GrC: NMDA g" quantity="GrCPop[0]/RothmanMFToGrCNMDA/g" scale="1mV" color="#FF0000" timeScale="1ms"/>
+        </Display>
+        
         <OutputFile id="Volts_file" fileName="v.dat">
             <OutputColumn id="v0" quantity="GrCPop[0]/v"/> 
         </OutputFile>
@@ -49,6 +54,11 @@
             <OutputColumn id="tsince" quantity="mossySpikerONPop[4]/tsince"/> 
             <OutputColumn id="tsince" quantity="mossySpikerONPop[5]/tsince"/> 
             <OutputColumn id="tsince" quantity="mossySpikerONPop[6]/tsince"/> 
+        </OutputFile>
+        
+        <OutputFile id="conds_file" fileName="syncond.dat">
+            <OutputColumn id="AMPAg" quantity="GrCPop[0]/RothmanMFToGrCAMPA/g"/> 
+            <OutputColumn id="NMDA" quantity="GrCPop[0]/RothmanMFToGrCNMDA/g"/> 
         </OutputFile>
         
     </Simulation>
