@@ -67,14 +67,14 @@ spike_generator_on = lems.Component("mossySpikerON",
 spike_generator_on.set_parameter("minimumISI", "5 ms")
 spike_generator_on.set_parameter("averageRate", "80 Hz")
 lems_instances_doc.add(spike_generator_on)
-'''
+
 spike_generator_off = lems.Component("mossySpikerOFF", 
                                      spike_generator_ref_poisson_type.name)
                                                       
 spike_generator_off.set_parameter("minimumISI", "2 ms")
-spike_generator_off.set_parameter("averageRate", "80 Hz")
+spike_generator_off.set_parameter("averageRate", "8 Hz")
 lems_instances_doc.add(spike_generator_off)
-'''
+
 
 # rename some components for convenience
 iaF_GrC = iaF_GrC_doc.iaf_ref_cells[0] # note that here iaF_GrC_doc.iaf_ref_cells[0] is
@@ -98,10 +98,10 @@ SpikeRecorderPop = nml.Population(id="SpikeRecorderPop",
 mossySpikersPopON = nml.Population(id=spike_generator_on.id+"Pop",
                                    component=spike_generator_on.id,
                                    size=n_inputs_ON)
-'''
+
 mossySpikersPopOFF = nml.Population(id=spike_generator_off.id+"Pop",
                                     component=spike_generator_off.id,
-                                    size=n_inputs_OFF)'''
+                                    size=n_inputs_OFF)
                                     
 # create network and add populations
 net = nml.Network(id="network")
@@ -110,11 +110,10 @@ net_doc.networks.append(net)
 net.populations.append(GrCPop)
 ####net.populations.append(SpikeRecordersPop)
 net.populations.append(mossySpikersPopON)
-#net.populations.append(mossySpikersPopOFF)
+net.populations.append(mossySpikersPopOFF)
 
 # set up connections
-################for stim_pop in [mossySpikersPopON, mossySpikersPopOFF]:
-for stim_pop in [mossySpikersPopON]:
+for stim_pop in [mossySpikersPopON, mossySpikersPopOFF]:
     for k in range(stim_pop.size):
         for synapse in [rothmanMFToGrCAMPA, rothmanMFToGrCNMDA]:
             connection = nml.SynapticConnection(from_="{}[{}]".format(stim_pop.id, k),
@@ -170,8 +169,10 @@ ls.create_display(disp1, "Spike generators", "-10", "80")
 of0 = 'Volts_file'
 ls.create_output_file(of0, "v.dat")
 
-of1 = 'prespike_file'
-ls.create_output_file(of1, "prespike.dat")
+of_on = 'prespike_on_file'
+ls.create_output_file(of_on, "prespike_on.dat")
+of_off = 'prespike_off_file'
+ls.create_output_file(of_off, "prespike_off.dat")
 
 if display_save_conductances:
 
@@ -199,12 +200,14 @@ if display_save_conductances:
 for i in range(n_inputs_ON):
     quantity = "%s[%i]/tsince"%(mossySpikersPopON.id, i)
     ls.add_line_to_display(disp1, "mossySpikersPopON %i"%i, quantity, "1ms", "#000000")
-    ls.add_column_to_output_file(of1, 'tsince', quantity)
+    ls.add_column_to_output_file(of_on, 'tsince', quantity)
     
-'''
-quantity = "%s[%i]/tsince"%(mossySpikersPopOFF.id, 0)
-ls.add_line_to_display(disp1, "mossySpikersPopOFF 0", quantity, "1ms", "#FF0000")
-'''
+
+for i in range(n_inputs_OFF):
+    quantity = "%s[%i]/tsince"%(mossySpikersPopOFF.id, i)
+    ls.add_line_to_display(disp1, "mossySpikersPopOFF %i"%i, quantity, "1ms", "#FF0000")
+    ls.add_column_to_output_file(of_off, 'tsince', quantity)
+
 
 # Save to LEMS XML file
 lems_file_name = ls.save_to_file()

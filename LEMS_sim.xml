@@ -32,17 +32,28 @@
             <Line id="mossySpikersPopON 1" quantity="mossySpikerONPop[1]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
             <Line id="mossySpikersPopON 2" quantity="mossySpikerONPop[2]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
             <Line id="mossySpikersPopON 3" quantity="mossySpikerONPop[3]/tsince" scale="1ms" color="#000000" timeScale="1ms"/>
+            <Line id="mossySpikersPopOFF 0" quantity="mossySpikerOFFPop[0]/tsince" scale="1ms" color="#FF0000" timeScale="1ms"/>
+            <Line id="mossySpikersPopOFF 1" quantity="mossySpikerOFFPop[1]/tsince" scale="1ms" color="#FF0000" timeScale="1ms"/>
+            <Line id="mossySpikersPopOFF 2" quantity="mossySpikerOFFPop[2]/tsince" scale="1ms" color="#FF0000" timeScale="1ms"/>
+            <Line id="mossySpikersPopOFF 3" quantity="mossySpikerOFFPop[3]/tsince" scale="1ms" color="#FF0000" timeScale="1ms"/>
         </Display>
         
         <OutputFile id="Volts_file" fileName="v.dat">
             <OutputColumn id="v0" quantity="GrCPop[0]/v"/> 
         </OutputFile>
         
-        <OutputFile id="prespike_file" fileName="prespike.dat">
+        <OutputFile id="prespike_on_file" fileName="prespike_on.dat">
             <OutputColumn id="tsince" quantity="mossySpikerONPop[0]/tsince"/> 
             <OutputColumn id="tsince" quantity="mossySpikerONPop[1]/tsince"/> 
             <OutputColumn id="tsince" quantity="mossySpikerONPop[2]/tsince"/> 
             <OutputColumn id="tsince" quantity="mossySpikerONPop[3]/tsince"/> 
+        </OutputFile>
+        
+        <OutputFile id="prespike_off_file" fileName="prespike_off.dat">
+            <OutputColumn id="tsince" quantity="mossySpikerOFFPop[0]/tsince"/> 
+            <OutputColumn id="tsince" quantity="mossySpikerOFFPop[1]/tsince"/> 
+            <OutputColumn id="tsince" quantity="mossySpikerOFFPop[2]/tsince"/> 
+            <OutputColumn id="tsince" quantity="mossySpikerOFFPop[3]/tsince"/> 
         </OutputFile>
         
     </Simulation>

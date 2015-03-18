@@ -2,6 +2,7 @@
     <network id="network">
         <population id="GrCPop" component="IaF_GrC" size="1"/>
         <population id="mossySpikerONPop" component="mossySpikerON" size="4"/>
+        <population id="mossySpikerOFFPop" component="mossySpikerOFF" size="4"/>
         <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[0]"/>
         <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[0]"/>
         <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[1]"/>
@@ -10,5 +11,13 @@
         <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[2]"/>
         <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerONPop[3]"/>
         <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerONPop[3]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerOFFPop[0]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerOFFPop[0]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerOFFPop[1]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerOFFPop[1]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerOFFPop[2]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerOFFPop[2]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCAMPA" from="mossySpikerOFFPop[3]"/>
+        <synapticConnection to="GrCPop[0]" synapse="RothmanMFToGrCNMDA" from="mossySpikerOFFPop[3]"/>
     </network>
 </neuroml>
